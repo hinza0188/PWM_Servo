@@ -6,6 +6,12 @@
 #include "SysClock.h"
 #include "LED.h"
 #include "UART.h"
+
+/*include our code */
+#include "GPIO.h"
+#include "Servo.h"
+#include "UI.h"
+
 /* include useful C libraries */
 #include <stdlib.h>
 #include <string.h>
@@ -21,6 +27,9 @@ int main(void){
 	
 	System_Clock_Init();		// Switch System Clock = 80 MHz
 	UART2_Init();
+	GPIO_Init();
+	Servo_Init();
+	user_prompt();
 
 	return 0;
 }

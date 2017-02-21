@@ -1,0 +1,8 @@
+# ignore project generated stuff
+/Listings
+/Objects
+
+# added ide ignores
+.idea/
+cmake-build-debug/
+.DS_Store
