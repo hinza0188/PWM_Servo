@@ -17,8 +17,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
-/* define good numbers */
-#define BufferSize 100
 
 /* declare variables here */
 uint8_t buffer[BufferSize];
