@@ -1,1 +1,0 @@
-.\servo.o: Servo.c
