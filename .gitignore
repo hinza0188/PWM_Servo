@@ -12,3 +12,10 @@
 .idea/
 cmake-build-debug/
 .DS_Store
+
+# core for mac
+cmsis_gcc.h
+core_cm4.h
+core_cmFunc.h
+core_cmInstr.h
+core_cmSimd.h
