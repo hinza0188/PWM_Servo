@@ -20,8 +20,5 @@ int main(void){
 	System_Clock_Init();		// Switch System Clock = 80 MHz
 	UART2_Init();
 	GPIO_Init();
-	Servo_Init();
 	user_prompt();
-
-	return 0;
 }

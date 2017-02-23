@@ -385,11 +385,6 @@
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
-              <FileName>LED.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\LED.c</FilePath>
-            </File>
-            <File>
               <FileName>SysClock.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\SysClock.c</FilePath>
@@ -398,11 +393,6 @@
               <FileName>UART.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\UART.c</FilePath>
-            </File>
-            <File>
-              <FileName>LED.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\LED.h</FilePath>
             </File>
             <File>
               <FileName>startup_stm32l476xx.s</FileName>

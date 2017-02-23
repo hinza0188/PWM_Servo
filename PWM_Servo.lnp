@@ -1,6 +1,5 @@
 --cpu Cortex-M4.fp --branchpatch=sdcomp-29491-629360
 ".\main.o"
-".\led.o"
 ".\sysclock.o"
 ".\uart.o"
 ".\startup_stm32l476xx.o"

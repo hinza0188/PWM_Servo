@@ -22,28 +22,21 @@ Dialog DLL:      TCM.DLL V1.14.14.0
  
 <h2>Project:</h2>
 Z:\swen563\PWM_Servo\PWM_Servo.uvprojx
-Project File Date:  02/20/2017
+Project File Date:  02/23/2017
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 3 (build 300)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Rebuild target 'Target 1'
-compiling SysClock.c...
-compiling main.c...
-Servo.h(29): error:  #92: identifier-list parameters may only be used in a function definition
-  void process_event(events);
-main.c: 0 warnings, 1 error
-compiling LED.c...
-assembling startup_stm32l476xx.s...
 compiling UART.c...
-compiling GPIO.c...
-compiling UI.c...
+compiling main.c...
+compiling SysClock.c...
+assembling startup_stm32l476xx.s...
 compiling Servo.c...
-Servo.h(29): error:  #92: identifier-list parameters may only be used in a function definition
-  void process_event(events);
-Servo.c(29): warning:  #223-D: function "start_move" declared implicitly
-  				start_move( state_position_1 ) ;
-Servo.c: 1 warning, 1 error
-".\PWM_Servo.axf" - 2 Error(s), 1 Warning(s).
+compiling UI.c...
+compiling GPIO.c...
+linking...
+Program Size: Code=1216 RO-data=408 RW-data=0 ZI-data=1632  
+".\PWM_Servo.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -61,8 +54,7 @@ Package Vendor: ARM
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:4.3.0
-Target not created.
-Build Time Elapsed:  00:00:02
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>
