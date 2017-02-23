@@ -1,3 +1,9 @@
+# ignore c files
+*.o
+*.crf
+*.d
+
+
 # ignore project generated stuff
 /Listings
 /Objects
