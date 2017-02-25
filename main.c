@@ -11,12 +11,13 @@
 
 
 /* declare variables here */
-uint8_t buffer[BufferSize];
+uint8_t mainBuffer[BufferSize];
 
 int main(void){
 	
 	System_Clock_Init();		// Switch System Clock = 80 MHz
 	UART2_Init();						// Initialize uart interaction
 	GPIO_Init();						// Initialize GPIO pin settings
+	TIM_Init();							// Initialize PWM Timer
 	user_prompt();					// Call user prompt interaction
 }
