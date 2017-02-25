@@ -2,6 +2,7 @@
 *.o
 *.crf
 *.d
+*.dep
 
 
 # ignore project generated stuff
