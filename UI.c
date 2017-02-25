@@ -7,8 +7,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-uint8_t buffer[BufferSize];
 
+// uint8_t buffer[BufferSize]; //(already declared in main.c) 
+uint8_t uiBuffer[BufferSize];
 
  void pause_servo(int *pause_flag)
 			{
@@ -35,19 +36,18 @@ void 	noop_servo(int *noop_flag)
 	{
 		/// continue servo commands here
 	} 	
-void user_prompt() {
-				
+void user_prompt() {			
 	// start writing user command code here
-			int pause_flag, continue_flag, right_flag, left_flag , noop_flag, reset_flag ;
-			char rxbyte[2];
-			int n= sprintf((char*)buffer, "\r\n 1. Press P or p for pausing the execution \r\n 2. Press C or c to continue the recipe \r\n 3. Press R or r to move 1 position to the right if possible\r\n 4. Press L or l Move 1 position to the left if possible 5. Press N or n for No-op\r\n 6. press B or b to restart the reciepe\r\n");
-			USART_Write( USART2,buffer,n);
+	int pause_flag, continue_flag, right_flag, left_flag , noop_flag, reset_flag ;
+	int i;
+	char rxbyte[2];
+	char prompt[] = "\r\n 1. Press P or p for pausing the execution \r\n 2. Press C or c to continue the recipe \r\n 3. Press R or r to move 1 position to the right if possible\r\n 4. Press L or l Move 1 position to the left if possible 5. Press N or n for No-op\r\n 6. press B or b to restart the reciepe\r\n";
+	
+	int n= sprintf((char*)uiBuffer, prompt, strlen(prompt));
+	USART_Write( USART2,uiBuffer,n);
 		
-
-
-
-	for(int i=0;i<2;i++)
-			{
+	for(i=0;i<2;i++) 
+	{
 			rxbyte[i]=USART_Read(USART2);
 			if(rxbyte[i]== 'P' || rxbyte[i] == 'p')
 			{
@@ -81,7 +81,6 @@ void user_prompt() {
 					reset_flag=1;
 					reset_servo(&reset_flag);
 			}
-		
-	return;
+		return;
+	}
 }
-			}
