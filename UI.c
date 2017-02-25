@@ -11,30 +11,30 @@
 // uint8_t buffer[BufferSize]; //(already declared in main.c) 
 uint8_t uiBuffer[BufferSize];
 
- void pause_servo(int *pause_flag)
-			{
-					//pause servo commands here
-			}
-	void continue_servo( int *continue_flag)
+void pause_servo(int *pause_flag)
 	{
-		/// continue servo commands here
+		//pause servo commands here
+	}
+void continue_servo( int *continue_flag)
+	{
+		// continue servo commands here
 	}
 	
- void right_servo(int *right_flag)
-			{
-					//pause servo commands here
-			}
-	void left_servo( int *left_flag)
+void right_servo(int *right_flag)
 	{
-		/// continue servo commands here
+		//pause servo commands here
+	}
+void left_servo( int *left_flag)
+	{
+		// continue servo commands here
 	}
 void 	noop_servo(int *noop_flag)
-			{
-					//pause servo commands here
-			}
+	{
+		//pause servo commands here
+	}
 	void reset_servo( int *reset_flag)
 	{
-		/// continue servo commands here
+		// continue servo commands here
 	} 	
 void user_prompt() {			
 	// start writing user command code here
@@ -81,6 +81,6 @@ void user_prompt() {
 					reset_flag=1;
 					reset_servo(&reset_flag);
 			}
-		return;
+		//return; //returning here will only run once and terminate
 	}
 }
