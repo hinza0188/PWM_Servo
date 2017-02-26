@@ -5,13 +5,13 @@
 // Include all required headers
 #include "Servo.h"
 
-/* define status of the servo in private variable */
-static enum servo_states current_servo_state = state_unknown ;
-
 // Define all of the commands that are valid
 #define NULL (0)
 #define MOV (0x20)
 #define RECIPE_END (0)
+
+/* define status of the servo in private variable */
+static enum servo_states current_servo_state = state_unknown ;
 
 // Examples of simple recipes
 // Note that, because the bottom 5 bits are zeros adding or bitwise or'ing
@@ -46,7 +46,7 @@ void process_event(enum events one_event) {
 			break ;
     case state_position_1:
       break;
-      case state_moving:
+    case state_moving:
       break;
 	}
 }

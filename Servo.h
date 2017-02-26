@@ -26,8 +26,12 @@ enum servo_states {
 // More events are needed.
 enum events {
 	user_entered_left,
+	user_entered_right,
+	user_entered_pause,
+	user_entered_continue,
+	user_entered_noop,
+	user_entered_restart,
 	recipe_ended
 };
 
-void Servo_Init(void);
 void process_event(enum events);
