@@ -4,6 +4,8 @@
 *.d
 *.dep
 
+# project files
+PWM_Servo.*
 
 # ignore project generated stuff
 /Listings
