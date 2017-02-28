@@ -8,7 +8,7 @@ void GPIO_Init(void) {
 	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN; 	// Enable GPIO Port A
 	GPIOA->MODER &= ~15;									// clear MODER Bytes of PA0 and PA1
 	GPIOA->MODER |= 0xA; 									// Set PA0 and PA1 to Alternate Function Mode
-  GPIOA->AFR[0]|= 0x1;								  // Assign AFRL1 (PA0)Register for TIM 2 connection
+  GPIOA->AFR[0]|= 0x11;								  // Assign AFRL1 (PA0)Register for TIM 2 connection
   GPIOA->PUPDR |= 0xA;									// Set Pull-Down mode for PA0 and PA1
 }
 
