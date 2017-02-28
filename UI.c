@@ -43,6 +43,8 @@ void user_prompt() {
 	int pause_flag, continue_flag, right_flag, left_flag , noop_flag, reset_flag, i;
 	char rxbyte[2];
 	const char *prompts[PROMPT_SIZE];
+  const char newline[] = "\r\n";
+  char end_prompt[] = "function has been executed!\r\n";
 	prompts[0] = "Welcome to the Project 2, and here are the instructions\r\n";
 	prompts[1] = "1.Press P or p for pausing the execution\r\n";
 	prompts[2] = "2.Press C or c to continue the recipe\r\n";
@@ -67,7 +69,7 @@ void user_prompt() {
 		strcat(rxbyte, "\r\n"); //add line break to the rxbyte
 		// then print the data in the rxbyte
 		USART_Write(USART2, (uint8_t *)rxbyte, sizeof(rxbyte));
-		
+		USART_Write(USART2, (uint8_t *)newline, sizeof(newline));
 		// then run commands
 		for(i=0;i<2;i++) {
       if(rxbyte[i]== 'P' || rxbyte[i] == 'p') {
@@ -96,5 +98,6 @@ void user_prompt() {
         reset_servo(&reset_flag);
       }
 		}
+    USART_Write(USART2, (uint8_t *)end_prompt, sizeof(end_prompt));
 	}
 }

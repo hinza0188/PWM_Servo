@@ -19,5 +19,9 @@ int main(void){
 	UART2_Init();						// Initialize uart interaction
 	GPIO_Init();						// Initialize GPIO pin settings
 	TIM_Init();							// Initialize PWM Timer
+  
+  TIM2->CR1 |= TIM_CR1_CEN; // start input capturing
+  while (1);
+  
 	user_prompt();					// Call user prompt interaction
 }
