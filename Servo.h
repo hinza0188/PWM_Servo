@@ -34,4 +34,10 @@ enum events {
 	recipe_ended
 };
 
+void end_recipe(int);
+void end_loop(int);
+void loop(int,int);
+void wait(int,int);
+void move(int,int);
+void operate(int, int);
 void process_event(enum events);
