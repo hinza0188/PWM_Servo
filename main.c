@@ -20,8 +20,10 @@ int main(void){
 	GPIO_Init();						// Initialize GPIO pin settings
 	TIM_Init();							// Initialize PWM Timer
   
-  TIM2->CR1 |= TIM_CR1_CEN; // start input capturing
-  while (1);
+  TIM2->CR1 |= TIM_CR1_CEN; // run the timer for PWM
   
 	user_prompt();					// Call user prompt interaction
+	
+	TIM2->CR1 |= 0x0;				// terminate timer running
+	
 }

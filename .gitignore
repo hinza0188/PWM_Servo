@@ -15,6 +15,7 @@ PWM_Servo.*
 .idea/
 cmake-build-debug/
 .DS_Store
+ExtDll.iex
 
 # core for mac
 cmsis_gcc.h

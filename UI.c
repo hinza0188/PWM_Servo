@@ -79,7 +79,6 @@ void user_prompt() {
       else if(rxbyte[i] == 'C' || rxbyte[i] == 'c') {
         continue_flag=1;
         continue_servo(&continue_flag);
-      
       }
       else if(rxbyte[i]== 'R' || rxbyte[i] == 'r') {
         right_flag =1;
