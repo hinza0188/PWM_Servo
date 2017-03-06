@@ -1,5 +1,5 @@
 #include "stm32l476xx.h"
-#include "GPIO.h"
+#include "Init.h"
 
 /*
 * Initialize GPIO Port A and B into Output Mode
@@ -12,9 +12,13 @@ void GPIO_Init(void) {
 //  GPIOA->PUPDR |= 0xA;									// Set Pull-Down mode for PA0 and PA1
 }
 
-void TIM_Init(void) {
+/*
+* Initialize TIM2 Channel 1 and 2 into Alternate function mode
+* and set it to PWM mode
+*/
+void PWM_Init(void) {
 	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN; // Enable Timer 2 Clock
-	TIM2->PSC = 7999;											// Set 80Mhz CPU Pre-Scalar
+	TIM2->PSC = 7999;											// Set 80Mhz CPU Pre-Scalar in 100 milli-second
 	TIM2->CCER &= 0x1;										// Disable Timer 2 output register
 	TIM2->CCMR1 &= 0x00;									// Clear CCMR1 CC1S bit to set output mode
   
@@ -35,5 +39,20 @@ void TIM_Init(void) {
   TIM2->CCER |= TIM_CCER_CC2P;          // Set Polarity in channel 2 for active high
   
   TIM2->EGR |= 0x01;										// Force update by setting EGR bit
+	TIM2->CR1 |= TIM_CR1_CEN; 						// Run the timer for PWM
 }
 
+
+/*
+* Initialize TIM5 and checks for the wait count
+*/
+void Counter_Init(void) {
+	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM5EN;	// Enable Timer 5 Clock
+	TIM5->PSC = 79;												// Set 80Mhz CPU Pre-Scalar in 10 micro-second
+	TIM5->CCER &= 0x1;										// Disable Timer 5 output register
+	TIM5->CCMR1 |= 0x1;										// The channel is now input mode, CCR1 register is now read-only
+	TIM5->CCER |= 0x1;										// Enable Timer 5 output register
+	
+	TIM2->EGR |= 0x01;										// Force update by setting EGR bit
+	TIM5->CR1 |= TIM_CR1_CEN;							// Start the timer
+}

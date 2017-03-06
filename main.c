@@ -6,7 +6,7 @@
 #include "SysClock.h"
 #include "LED.h"
 #include "UART.h"
-#include "GPIO.h"
+#include "Init.h"
 #include "Servo.h"
 #include "UI.h"
 
@@ -18,16 +18,12 @@ int main(void){
 	System_Clock_Init();		// Switch System Clock = 80 MHz
 	UART2_Init();						// Initialize uart interaction
 	GPIO_Init();						// Initialize GPIO pin settings
-	TIM_Init();							// Initialize PWM Timer
+	PWM_Init();							// Initialize TIM2 PWM Mode
+	Counter_Init();					// Initialize TIM5 Counter Mode
   
-  TIM2->CR1 |= TIM_CR1_CEN; // run the timer for PWM
-  
-	operate(32, 0);						// MOV + 0
-	operate(37, 0);						// MOV + 5
-	
+	//operate(32, 0);						// MOV + 0 for the left servo ( PA0 )
+	//operate(37, 1);						// MOV + 5 for the right servo ( PA1 )
 	
 	user_prompt();					// Call user prompt interaction
-	
-	TIM2->CR1 |= 0x0;				// terminate timer running
 	
 }

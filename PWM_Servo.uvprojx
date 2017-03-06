@@ -415,11 +415,6 @@
               <FilePath>.\UART.h</FilePath>
             </File>
             <File>
-              <FileName>GPIO.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\GPIO.c</FilePath>
-            </File>
-            <File>
               <FileName>UI.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\UI.c</FilePath>
@@ -443,6 +438,16 @@
               <FileName>LED.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\LED.h</FilePath>
+            </File>
+            <File>
+              <FileName>Init.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Init.c</FilePath>
+            </File>
+            <File>
+              <FileName>Init.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Init.h</FilePath>
             </File>
           </Files>
         </Group>

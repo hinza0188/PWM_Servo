@@ -27,20 +27,23 @@ Project File Date:  02/27/2017
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 3 (build 300)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Rebuild target 'Target 1'
-compiling main.c...
-main.c(25): error:  #165: too few arguments in function call
-  	operate(32);						// MOV + 0
-main.c(26): error:  #165: too few arguments in function call
-  	operate(37);						// MOV + 5
-main.c: 0 warnings, 2 errors
 compiling UART.c...
 compiling SysClock.c...
+compiling main.c...
+main.c(32): warning:  #111-D: statement is unreachable
+  	user_prompt();					// Call user prompt interaction
+main.c: 1 warning, 0 errors
 assembling startup_stm32l476xx.s...
-compiling GPIO.c...
 compiling UI.c...
 compiling Servo.c...
+Servo.c(112): warning:  #177-D: variable "default_wait" was declared but never referenced
+  	int default_wait = 5;									// wait at least 100 ms 
+Servo.c: 1 warning, 0 errors
 compiling LED.c...
-".\PWM_Servo.axf" - 2 Error(s), 0 Warning(s).
+compiling Init.c...
+linking...
+Program Size: Code=1520 RO-data=408 RW-data=0 ZI-data=1632  
+".\PWM_Servo.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -58,8 +61,7 @@ Package Vendor: ARM
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:4.3.0
-Target not created.
-Build Time Elapsed:  00:00:02
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>

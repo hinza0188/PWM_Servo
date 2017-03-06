@@ -64,15 +64,19 @@ void move(int param, int servo) {
 				TIM2->CCR1 = (4);			// at 0 degree, servo duty is 0.388ms
 				break;
 			case 1:
+				TIM2->CCR1 = (7);			// at 36 degree, servo duty is 0.7ms
 				break;
 			case 2:
+				TIM2->CCR1 = (10);		// at 72 degree, servo duty is 1.0ms
 				break;
 			case 3:
+				TIM2->CCR1 = (13);		// at 108 degree, servo duty is 1.3ms
 				break;
 			case 4:
+				TIM2->CCR1 = (17);		// at 144 degree, servo duty is 1.7ms
 				break;
 			case 5:
-				TIM2->CCR1 = (21);		// at 180 degree, servo duty is 2.14ms
+				TIM2->CCR1 = (20);		// at 180 degree, servo duty is 2.14ms
 				break;
 		}
 	} else {	// represents servo connected to PA1
@@ -81,25 +85,44 @@ void move(int param, int servo) {
 				TIM2->CCR2 = (4);			// at 0 degree, servo duty is 0.388ms
 				break;
 			case 1:
+				TIM2->CCR2 = (7);			// at 36 degree, servo duty is 0.7ms
 				break;
 			case 2:
+				TIM2->CCR2 = (10);		// at 72 degree, servo duty is 1.0ms
 				break;
 			case 3:
+				TIM2->CCR2 = (13);		// at 108 degree, servo duty is 1.3ms
 				break;
 			case 4:
+				TIM2->CCR2 = (17);		// at 144 degree, servo duty is 1.7ms
 				break;
 			case 5:
-				TIM2->CCR2 = (21);		// at 180 degree, servo duty is 2.14ms
+				TIM2->CCR2 = (20);		// at 180 degree, servo duty is 2.14ms
 				break;
 		}
 	}
 }
 
+/*
+* Waits at least 100 milli-second, or takes parameter to wait extra time
+* (int) param : extra value that takes up to 31 milli seccond (5 bit)
+* (int) servo : 0 -> PA0 || 1 -> PA1
+*/
 void wait(int param, int servo) {
+	int default_wait = 5;									// wait at least 100 ms 
+	int start_count = TIM5->CCR1;					// get current timer count
+	int end_count = start_count + 100000;	// get 1 second later
+	if (param) {
+		end_count = end_count + (100000 * param);
+	}
 	if (!servo) { // represents servo connected to PA0
-		// do functionality here
+		
+		
+		
 	} else { // represents servo connected to PA1
-		// do functionality here
+		
+		
+		
 	}
 }
 
