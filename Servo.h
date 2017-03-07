@@ -34,6 +34,7 @@ enum events {
 	recipe_ended
 };
 
+void run_recipe(void);
 void end_recipe(int);
 void end_loop(int);
 void loop(int,int);

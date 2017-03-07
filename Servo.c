@@ -21,7 +21,9 @@ static enum servo_states current_servo_state = state_unknown ;
 // Note that, because the bottom 5 bits are zeros adding or bitwise or'ing
 // in the values for the bottom 5 bits are equivalent. However, using a bitwise
 // or is better at communicating your purpose.
-unsigned char recipe1[] = { MOV + 3, MOV | 5, RECIPE_END } ;
+
+//unsigned char recipe1[] = { MOV + 3, MOV | 5, RECIPE_END } ;
+unsigned char recipe1[] = { MOV + 0, MOV + 5, MOV + 0, MOV + 4, LOOP + 5, MOV + 1, MOV + 4} ;
 unsigned char recipe2[] = { MOV | 5, MOV | 2, RECIPE_END } ;
 
 // If you set up an array like this then you can easily switch recipes
@@ -109,7 +111,7 @@ void move(int param, int servo) {
 * (int) servo : 0 -> PA0 || 1 -> PA1
 */
 void wait(int param, int servo) {
-	int default_wait = 5;									// wait at least 100 ms 
+	//int default_wait = 5;									// wait at least 100 ms 
 	int start_count = TIM5->CCR1;					// get current timer count
 	int end_count = start_count + 100000;	// get 1 second later
 	if (param) {
@@ -148,6 +150,10 @@ void end_recipe(int servo) {
 	} else { // represents servo connected to PA1
 		// do functionality here
 	}
+}
+
+void run_recipe(void) {
+	return;
 }
 
 

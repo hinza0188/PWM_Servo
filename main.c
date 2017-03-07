@@ -10,7 +10,6 @@
 #include "Servo.h"
 #include "UI.h"
 #include "recipe.h"
-#include "servomanagement.h"
 
 /* declare variables here */
 uint8_t mainBuffer[BufferSize];
@@ -22,7 +21,6 @@ int main(void){
 	PWM_Init();							// Initialize TIM2 PWM Mode
 	Counter_Init();					// Initialize TIM5 Counter Mode
 	
-	Fill_Test_Recipe1(engine);
   
 	//operate(32, 0);						// MOV + 0 for the left servo ( PA0 )
 	//operate(37, 1);						// MOV + 5 for the right servo ( PA1 )
