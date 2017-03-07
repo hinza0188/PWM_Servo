@@ -78,7 +78,7 @@ void move(int param, int servo) {
 				TIM2->CCR1 = (17);		// at 144 degree, servo duty is 1.7ms
 				break;
 			case 5:
-				TIM2->CCR1 = (20);		// at 180 degree, servo duty is 2.14ms
+				TIM2->CCR1 = (21);		// at 180 degree, servo duty is 2.14ms
 				break;
 		}
 	} else {	// represents servo connected to PA1
@@ -99,7 +99,7 @@ void move(int param, int servo) {
 				TIM2->CCR2 = (17);		// at 144 degree, servo duty is 1.7ms
 				break;
 			case 5:
-				TIM2->CCR2 = (20);		// at 180 degree, servo duty is 2.14ms
+				TIM2->CCR2 = (21);		// at 180 degree, servo duty is 2.14ms
 				break;
 		}
 	}
