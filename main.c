@@ -26,5 +26,12 @@ int main(void){
 	//operate(37, 1);						// MOV + 5 for the right servo ( PA1 )
 	
 	user_prompt();					// Call user prompt interaction
+	while (1) { // run forever
+		// check servo 1 is free
+		// check servo 2 is free
+		// check if user input
+		// wait till 1/100 millisecond
+	}
+	
 	
 }
