@@ -2,8 +2,7 @@
 * Author: Yongki An
 */
 
-// This is a good way to define the status of the display.
-// This should be in a header (.h) file.
+/* This is a good way to define the status of the display */
 enum status {
 	status_running,
 	status_paused,
@@ -11,19 +10,20 @@ enum status {
 	status_nested_error 
 };
 
-// This is a good way to define the state of a servo motor.
-// This should be in a header (.h) file.
+/* This is a good way to define the state of a servo motor */
 enum servo_states {
-	state_position_0,
+	state_position_0,		// the left most position
 	state_position_1,
+	state_position_2,
+	state_position_3,
+	state_position_4,
+	state_position_5,		// the right most position
 	state_unknown,
 	state_moving,
 	state_recipe_ended
 };
 
-// This is a good way to define the event transitions between states.
-// This also should be in a header (.h) file.
-// More events are needed.
+/* This is a good way to define the event transitions between states */
 enum events {
 	user_entered_left,
 	user_entered_right,

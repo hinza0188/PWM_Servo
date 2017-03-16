@@ -53,6 +53,6 @@ void Counter_Init(void) {
 	TIM5->CCMR1 |= 0x1;										// The channel is now input mode, CCR1 register is now read-only
 	TIM5->CCER |= 0x1;										// Enable Timer 5 output register
 	
-	TIM2->EGR |= 0x01;										// Force update by setting EGR bit
+	TIM5->EGR |= 0x01;										// Force update by setting EGR bit
 	TIM5->CR1 |= TIM_CR1_CEN;							// Start the timer
 }
