@@ -72,7 +72,7 @@ void move(int param, int servo) {
 				TIM2->CCR1 = (10);		// at 72 degree, servo duty is 1.0ms
 				break;
 			case 3:
-				TIM2->CCR1 = (13);		// at 108 degree, servo duty is 1.3ms
+				TIM2->CCR1 = (14);		// at 108 degree, servo duty is 1.4ms
 				break;
 			case 4:
 				TIM2->CCR1 = (17);		// at 144 degree, servo duty is 1.7ms
@@ -93,7 +93,7 @@ void move(int param, int servo) {
 				TIM2->CCR2 = (10);		// at 72 degree, servo duty is 1.0ms
 				break;
 			case 3:
-				TIM2->CCR2 = (13);		// at 108 degree, servo duty is 1.3ms
+				TIM2->CCR2 = (14);		// at 108 degree, servo duty is 1.4ms
 				break;
 			case 4:
 				TIM2->CCR2 = (17);		// at 144 degree, servo duty is 1.7ms
@@ -166,20 +166,32 @@ static void start_move( enum servo_states my_state ) {
 
 // This section should be in a separate .c file such as state_machine.c.
 // In this code you add code to each case to process the 
-void process_event(enum events one_event) {
+void process_event(enum events event) {
 	switch ( current_servo_state ){
-		case state_position_0 :		// right-most position
-			if ( one_event == user_entered_left ) {
-				start_move( state_position_1 ) ;
-				current_servo_state = state_moving ;		// when the move ends (enough time has elapsed) new state will be state_position_1
+		case state_position_0 :		// left-most position
+			if ( event == user_entered_left ) {
+				current_servo_state = state_position_0;		// when the move ends (enough time has elapsed) new state will be state_position_1
+			} else if (event == user_entered_right) {
+				start_move(state_position_1);
+				current_servo_state = state_moving;
+				// wait for one duty cycle
+				current_servo_state = state_position_1;
 			}
       break ;
-		case state_unknown :
-			break ;
-		case state_recipe_ended :
-			break ;
-    case state_position_1:
+		case state_position_1:
       break;
+		case state_position_2:
+      break;
+		case state_position_3:
+      break;
+		case state_position_4:
+      break;
+		case state_position_5:		// right-most position
+      break;
+		case state_unknown :
+			break;
+		case state_recipe_ended :
+			break;
     case state_moving:
       break;
 	}

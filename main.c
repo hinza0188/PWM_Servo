@@ -30,8 +30,9 @@ enum servo_states servo0L_state, servo1R_state;
 int main(void){
 	int i;
 	char rxbyte[2];
-	const char *prompts[PROMPT_SIZE];
   char end_prompt[] = "function has been executed!\r\n";
+	char input_prompt[] = "Type two commands for asynchronous Servo running\r\n";
+	const char *prompts[PROMPT_SIZE];
 	prompts[0] = "Welcome to the Project 2, and here are the instructions\r\n";
 	prompts[1] = "1.Press P or p for pausing the execution\r\n";
 	prompts[2] = "2.Press C or c to continue the recipe\r\n";
@@ -51,34 +52,24 @@ int main(void){
 	servo1R_status = status_paused;
 	servo1R_state = state_unknown;	
 	
-	operate(MOV+0, 0);      // MOV + 0 for the left servo ( PA0 )
-	operate(MOV+5, 1);			// MOV + 5 for the right servo ( PA1 )
+	//operate(MOV+0, 0);      // MOV + 0 for the left servo ( PA0 )
+	//operate(MOV+5, 1);			// MOV + 5 for the right servo ( PA1 )
 	
 	//////////////////////////////PRINT TUTORIAL////////////////////////////////////
 	for (i=0; i<PROMPT_SIZE; i++) {
 		// print all 6 prompt lines for user tutorial
 		USART_Write( USART2, (uint8_t *)prompts[i], strlen(prompts[i]));
 	}
+	USART_Write( USART2, (uint8_t *)input_prompt, sizeof(input_prompt));
 	////////////////////////////////////////////////////////////////////////////////
 	while (1) { // run forever			
-		// check servo 1 is free
+		// check servo 0 is free
 		
-		// check servo 2 is free
+		// check servo 1 is free
 		
 		
 		
 		///////////////////////////////////////////////////////////////////////////////
-		char the_prompt[] = "\r\nType two commands for asynchronous Servo running\r\n";
-		USART_Write( USART2, (uint8_t *)the_prompt, sizeof(the_prompt));
-		
-		for(i=0;i<2;i++) {
-			// first, run double UART read wait
-			rxbyte[i]=USART_Read(USART2);
-		}
-		strcat(rxbyte, "\r\n"); //add line break to the rxbyte
-		// then print the data in the rxbyte
-		USART_Write(USART2, (uint8_t *)rxbyte, sizeof(rxbyte));
-		USART_Write(USART2, (uint8_t *)"\r\n", sizeof("\r\n"));
 		
 		// parse it here?
 		for(i=0;i<2;i++) {
