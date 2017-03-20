@@ -52,9 +52,6 @@ int main(void){
 	servo1R_status = status_paused;
 	servo1R_state = state_unknown;	
 	
-	//operate(MOV+0, 0);      // MOV + 0 for the left servo ( PA0 )
-	//operate(MOV+5, 1);			// MOV + 5 for the right servo ( PA1 )
-	
 	//////////////////////////////PRINT TUTORIAL////////////////////////////////////
 	for (i=0; i<PROMPT_SIZE; i++) {
 		// print all 6 prompt lines for user tutorial
@@ -70,55 +67,12 @@ int main(void){
 		
 		
 		///////////////////////////////////////////////////////////////////////////////
-		
+		// check if user input
 		// parse it here?
-		for(i=0;i<2;i++) {
-			if (i==0) {
-				if(rxbyte[i]== 'P' || rxbyte[i] == 'p') {
-					servo0L_event = user_entered_pause;
-				}
-				else if(rxbyte[i] == 'C' || rxbyte[i] == 'c') {
-					servo0L_event = user_entered_continue;
-				}
-				else if(rxbyte[i]== 'R' || rxbyte[i] == 'r') {
-					servo0L_event = user_entered_right;
-				}
-				else if (rxbyte[i]== 'L' || rxbyte[i] == 'l') {
-					servo0L_event = user_entered_left;
-				}
-				else if (rxbyte[i] == 'N' || rxbyte[i] == 'n') {
-					servo0L_event = user_entered_noop;
-				}
-				else if (rxbyte[i]== 'B' || rxbyte[i] == 'b') {
-					servo0L_event = user_entered_restart;
-				}
-			} else {
-				if(rxbyte[i]== 'P' || rxbyte[i] == 'p') {
-					servo1R_event = user_entered_pause;
-				}
-				else if(rxbyte[i] == 'C' || rxbyte[i] == 'c') {
-					servo1R_event = user_entered_continue;
-				}
-				else if(rxbyte[i]== 'R' || rxbyte[i] == 'r') {
-					servo1R_event = user_entered_right;
-				}
-				else if (rxbyte[i]== 'L' || rxbyte[i] == 'l') {
-					servo1R_event = user_entered_left;
-				}
-				else if (rxbyte[i] == 'N' || rxbyte[i] == 'n') {
-					servo1R_event = user_entered_noop;
-				}
-				else if (rxbyte[i]== 'B' || rxbyte[i] == 'b') {
-					servo1R_event = user_entered_restart;
-				}
-			}
-		}
 		
-		
-		USART_Write(USART2, (uint8_t *)end_prompt, sizeof(end_prompt));
 		////////////////////////////////////////////////////////////////////////////////
-		
-		// check if user input		
+		operate(MOV+5, 0);      // MOV + 0 for the left servo ( PA0 )
+		operate(MOV+0, 1);			// MOV + 5 for the right servo ( PA1 )		
 
 		
 		operate(WAIT,0);	// wait 100 millisecond for PA0 Servo

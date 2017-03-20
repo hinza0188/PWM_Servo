@@ -47,31 +47,48 @@ void user_prompt() {
 		USART_Write(USART2, (uint8_t *)newline, sizeof(newline));
 		// then run commands
 		for(i=0;i<2;i++) {
-      if(rxbyte[i]== 'P' || rxbyte[i] == 'p') {
-        pause_flag=1;
-        pause_servo(&pause_flag );
-      }
-      else if(rxbyte[i] == 'C' || rxbyte[i] == 'c') {
-        continue_flag=1;
-        continue_servo(&continue_flag);
-      }
-      else if(rxbyte[i]== 'R' || rxbyte[i] == 'r') {
-        right_flag =1;
-        right_servo(&right_flag);
-      }
-      else if (rxbyte[i]== 'L' || rxbyte[i] == 'l') {
-        left_flag=1;
-        left_servo(&left_flag );
-      }
-      else if (rxbyte[i] == 'N' || rxbyte[i] == 'n') {
-        noop_flag=1;
-        noop_servo(&noop_flag);
-      }
-      else if (rxbyte[i]== 'B' || rxbyte[i] == 'b') {
-        reset_flag=1;
-        reset_servo(&reset_flag);
-      }
+			if (i==0) {
+				if(rxbyte[i]== 'P' || rxbyte[i] == 'p') {
+					servo0L_event = user_entered_pause;
+				}
+				else if(rxbyte[i] == 'C' || rxbyte[i] == 'c') {
+					servo0L_event = user_entered_continue;
+				}
+				else if(rxbyte[i]== 'R' || rxbyte[i] == 'r') {
+					servo0L_event = user_entered_right;
+				}
+				else if (rxbyte[i]== 'L' || rxbyte[i] == 'l') {
+					servo0L_event = user_entered_left;
+				}
+				else if (rxbyte[i] == 'N' || rxbyte[i] == 'n') {
+					servo0L_event = user_entered_noop;
+				}
+				else if (rxbyte[i]== 'B' || rxbyte[i] == 'b') {
+					servo0L_event = user_entered_restart;
+				}
+			} else {
+				if(rxbyte[i]== 'P' || rxbyte[i] == 'p') {
+					servo1R_event = user_entered_pause;
+				}
+				else if(rxbyte[i] == 'C' || rxbyte[i] == 'c') {
+					servo1R_event = user_entered_continue;
+				}
+				else if(rxbyte[i]== 'R' || rxbyte[i] == 'r') {
+					servo1R_event = user_entered_right;
+				}
+				else if (rxbyte[i]== 'L' || rxbyte[i] == 'l') {
+					servo1R_event = user_entered_left;
+				}
+				else if (rxbyte[i] == 'N' || rxbyte[i] == 'n') {
+					servo1R_event = user_entered_noop;
+				}
+				else if (rxbyte[i]== 'B' || rxbyte[i] == 'b') {
+					servo1R_event = user_entered_restart;
+				}
+			}
 		}
-    USART_Write(USART2, (uint8_t *)end_prompt, sizeof(end_prompt));
+		
+		
+		USART_Write(USART2, (uint8_t *)end_prompt, sizeof(end_prompt));
 	}
 }
