@@ -48,9 +48,9 @@ void PWM_Init(void) {
 */
 void Counter_Init(void) {
 	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM5EN;	// Enable Timer 5 Clock
-	TIM5->PSC = 79;												// Set 80Mhz CPU Pre-Scalar in 10 micro-second
+	TIM5->PSC = 7999;											// Set 80Mhz CPU Pre-Scalar in 100 milli-second
 	TIM5->CCER &= 0x1;										// Disable Timer 5 output register
-	TIM5->CCMR1 |= 0x1;										// The channel is now input mode, CCR1 register is now read-only
+	TIM5->CCMR1 |= TIM_CCMR1_OC1M;				// The channel is now output capture mode
 	TIM5->CCER |= 0x1;										// Enable Timer 5 output register
 	
 	TIM5->EGR |= 0x01;										// Force update by setting EGR bit
