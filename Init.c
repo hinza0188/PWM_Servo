@@ -19,7 +19,7 @@ void GPIO_Init(void) {
 void PWM_Init(void) {
 	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN; // Enable Timer 2 Clock
 	TIM2->PSC = 7999;											// Set 80Mhz CPU Pre-Scalar in 100 milli-second
-	TIM2->CCER &= 0x1;										// Disable Timer 2 output register
+	TIM2->CCER &= 0;										// Disable Timer 2 output register
 	TIM2->CCMR1 &= 0x00;									// Clear CCMR1 CC1S bit to set output mode
   
   TIM2->CCMR1 |= TIM_CCMR1_OC1M;        // Set OC1M (Output Compare 1 Mode)
@@ -49,10 +49,6 @@ void PWM_Init(void) {
 void Counter_Init(void) {
 	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM5EN;	// Enable Timer 5 Clock
 	TIM5->PSC = 7999;											// Set 80Mhz CPU Pre-Scalar in 100 milli-second
-	TIM5->CCER &= 0x1;										// Disable Timer 5 output register
-	TIM5->CCMR1 |= TIM_CCMR1_OC1M;				// The channel is now output capture mode
-	TIM5->CCER |= 0x1;										// Enable Timer 5 output register
-	
 	TIM5->EGR |= 0x01;										// Force update by setting EGR bit
 	TIM5->CR1 |= TIM_CR1_CEN;							// Start the timer
 }

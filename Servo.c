@@ -5,14 +5,7 @@
 // Include all required headers
 #include "stm32l476xx.h"
 #include "Servo.h"
-
-// Define all of the commands that are valid
-#define NULL (0)
-#define MOV (0x20)
-#define WAIT (0x40)
-#define LOOP (0x80)
-#define END_LOOP (0x81)
-#define RECIPE_END (0)
+#include "Init.h"
 
 /* define status of the servo in private variable */
 static enum servo_states current_servo_state = state_unknown ;
@@ -21,14 +14,6 @@ static enum servo_states current_servo_state = state_unknown ;
 // Note that, because the bottom 5 bits are zeros adding or bitwise or'ing
 // in the values for the bottom 5 bits are equivalent. However, using a bitwise
 // or is better at communicating your purpose.
-
-//unsigned char recipe1[] = { MOV + 3, MOV | 5, RECIPE_END } ;
-unsigned char recipe1[] = { MOV + 0, MOV + 5, MOV + 0, MOV + 4, LOOP + 5, MOV + 1, MOV + 4} ;
-unsigned char recipe2[] = { MOV | 5, MOV | 2, RECIPE_END } ;
-
-// If you set up an array like this then you can easily switch recipes
-// using an additional user input command.
-unsigned char *recipes[] = { recipe1, recipe2, NULL } ;
 
 /*
 * Execute each one recipe command
@@ -111,20 +96,10 @@ void move(int param, int servo) {
 * (int) servo : 0 -> PA0 || 1 -> PA1
 */
 void wait(int param, int servo) {
-	//int default_wait = 5;									// wait at least 100 ms 
-	int start_count = TIM5->CCR1;					// get current timer count
-	int end_count = start_count + 100000;	// get 1 second later
-	if (param) {
-		end_count = end_count + (100000 * param);
-	}
 	if (!servo) { // represents servo connected to PA0
 		
-		
-		
 	} else { // represents servo connected to PA1
-		
-		
-		
+
 	}
 }
 
@@ -147,8 +122,10 @@ void end_loop(int servo) {
 void end_recipe(int servo) {
 	if (!servo) { // represents servo connected to PA0
 		// do functionality here
+		wait_counter_0=0;
 	} else { // represents servo connected to PA1
 		// do functionality here
+		wait_counter_1=0;
 	}
 }
 

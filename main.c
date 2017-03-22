@@ -12,13 +12,6 @@
 #include "Init.h"
 #include "Servo.h"
 
-#define MOV (0x20)
-#define WAIT (0x40)
-#define LOOP (0x80)
-#define END_LOOP (0x81)
-#define RECIPE_END (0)
-#define PROMPT_SIZE 7
-#define RECIPE_SIZE 4
 
 /* declare variables here */
 uint8_t mainBuffer[BufferSize];
@@ -26,15 +19,21 @@ enum status servo0L_status, servo1R_status;
 enum events servo0L_event, servo1R_event;
 enum servo_states servo0L_state, servo1R_state;
 
+int wait_counter_0, wait_counter_1 = 0;
+
+//unsigned char recipe1[] = { MOV + 0, WAIT + 2, MOV + 5, MOV + 0, MOV + 5,  MOV + 0, MOV + 5 } ;
+//unsigned char recipe2[] = { MOV + 0, MOV + 1, MOV + 2, MOV + 3,  MOV + 4, WAIT + 2, MOV + 5 } ;
+//unsigned char *recipes[] = { recipe1, recipe2, NULL } ;
 
 int main(void){
-	int i,j,k;
-//	char rxbyte[2];
+	int i,j;
+	int counter;
+	int *recipe1 = calloc(RECIPE_SIZE, sizeof(int));
+	int *recipe2 = calloc(RECIPE_SIZE, sizeof(int));
+//	 char rxbyte[2];
 //  char end_prompt[] = "function has been executed!\r\n";
 	char input_prompt[] = "Type two commands for asynchronous Servo running\r\n";
 	const char *prompts[PROMPT_SIZE];
-	int *recipe1 = calloc(RECIPE_SIZE, sizeof(int));
-	int *recipe2 = calloc(RECIPE_SIZE, sizeof(int));
 	prompts[0] = "Welcome to the Project 2, and here are the instructions\r\n";
 	prompts[1] = "1.Press P or p for pausing the execution\r\n";
 	prompts[2] = "2.Press C or c to continue the recipe\r\n";
@@ -42,26 +41,24 @@ int main(void){
 	prompts[4] = "4.Press L or l Move 1 position to the left if possible\r\n";
 	prompts[5] = "5.Press N or n for No-operation\r\n";
 	prompts[6] = "6.press B or b to restart the reciepe\r\n";
-	// fill these up  //////////////////////////////////////////////////////////////
+	//fill these up  //////////////////////////////////////////////////////////////
 	recipe1[0] = MOV+5;
-	recipe1[1] = MOV+0;
-	recipe1[2] = MOV+5;
-	recipe1[3] = MOV+3;
-	
+	recipe1[2] = MOV+0;
+	recipe1[3] = MOV+5;
+	recipe1[4] = MOV+0;
 	////////////////////////////////////////////////////////////////////////////////
 	recipe2[0] = MOV+1;
 	recipe2[1] = MOV+2;
 	recipe2[2] = MOV+3;
-	recipe2[3] = MOV+4;
+	recipe2[4] = MOV+4;
+	// until this point ///////////////////////////////////////////////////////////////
 	
-	// until this point ////////////////////////////////////////////////////////////
 	
 	
 	System_Clock_Init();		// Switch System Clock = 80 MHz
 	UART2_Init();						// Initialize uart interaction
 	GPIO_Init();						// Initialize GPIO pin settings
 	PWM_Init();							// Initialize TIM2 PWM Mode
-	Counter_Init();					// Initialize TIM5 Counter Mode
 	
   servo0L_status = status_paused;	
 	servo0L_state = state_unknown;
@@ -89,15 +86,20 @@ int main(void){
 		////////////////////////////////////////////////////////////////////////////////
 		// call recipe
 		for (j=0; j<RECIPE_SIZE; j++) {
-			operate(recipe1[j], 0);      // MOV + 0 for the left servo ( PA0 )
-			operate(recipe2[j], 1);
+			operate((int)recipe1[j], 0);\
+			operate((int)recipe2[j], 1);
 			
 			// write general wait for 100 ms using timer 5
-			// output capture mode -> assign value to it
-			//TIM5->CCR1 = 100;
-			//while(TIM5->CCR1);
-			for (k=0; k<10000000; k++);
-		}
+			Counter_Init();					// Initialize TIM5 Counter Mode
+			while(1){
+				counter = TIM5->CNT;
+				if ( counter > 0xA00 ) {			// WAIT 100 ms
+					TIM5->CR1 &= 0;							// Stop the timer for reseting the counter value
+					break;
+				}
+			}
+		}	// recipe calling ends here ///////////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////////////////////////
 	}
 	
 	
