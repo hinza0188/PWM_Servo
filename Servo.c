@@ -6,9 +6,18 @@
 #include "stm32l476xx.h"
 #include "Servo.h"
 #include "Init.h"
+#include "LED.h"
 
 /* define status of the servo in private variable */
 static enum servo_states current_servo_state = state_unknown ;
+
+unsigned char recipe1[] = { 
+	MOV + 5, MOV + 0, MOV + 5, MOV + 0,  MOV + 5, MOV + 3, RECIPE_END 
+};
+unsigned char recipe2[] = { 
+	MOV + 5, MOV + 4, MOV + 3, MOV + 2,  MOV + 1, MOV + 0, RECIPE_END 
+};
+unsigned char *recipes[] = { recipe1, recipe2, 0 };
 
 // Examples of simple recipes
 // Note that, because the bottom 5 bits are zeros adding or bitwise or'ing
@@ -21,7 +30,7 @@ static enum servo_states current_servo_state = state_unknown ;
 * int servo = (0 -> PA0, 1 -> PA1)
 * returns None
 */
-void operate( int dude, int servo ) {
+void operate( int dude, int servo, int line ) {
 	int opcode = (dude & 224);
 	int param = (dude & 31);
 	
@@ -33,13 +42,13 @@ void operate( int dude, int servo ) {
 			wait(param, servo);
 			break;
 		case LOOP: 					// opcode is 100
-			loop(param, servo);
+			loop(param, servo, line);
 			break;
 		case END_LOOP: 			// opcode is 101
-			end_loop(servo);
+			end_loop(servo, line);
 			break;
 		case RECIPE_END: 		// opcode is 000
-			end_recipe(servo);
+			end_recipe(servo, line);
 			break;
 	}
 }
@@ -103,29 +112,29 @@ void wait(int param, int servo) {
 	}
 }
 
-void loop(int param, int servo) {
+void loop(int param, int servo, int line) {
 	if (!servo) { // represents servo connected to PA0
-		// do functionality here
+		
 	} else { // represents servo connected to PA1
 		// do functionality here
 	}
 }
 
-void end_loop(int servo) {
+int end_loop(int servo, int line) {
 	if (!servo) { // represents servo connected to PA0
 		// do functionality here
 	} else { // represents servo connected to PA1
 		// do functionality here
 	}
+	return 0;
 }
 
-void end_recipe(int servo) {
+void end_recipe(int servo, int line) {
+	// Blink the LED
 	if (!servo) { // represents servo connected to PA0
 		// do functionality here
-		wait_counter_0=0;
 	} else { // represents servo connected to PA1
 		// do functionality here
-		wait_counter_1=0;
 	}
 }
 

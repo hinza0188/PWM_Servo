@@ -7,8 +7,6 @@
 #define LOOP (0x80)
 #define END_LOOP (0x81)
 #define RECIPE_END (0)
-#define PROMPT_SIZE 7
-#define RECIPE_SIZE 4
 
 /* This is a good way to define the status of the display */
 enum status {
@@ -42,17 +40,15 @@ enum events {
 	recipe_ended
 };
 
-//extern unsigned char recipe1[];
-//extern unsigned char recipe2[];
-//extern unsigned char *recipes[];
-
-extern int wait_counter_0, wait_counter_1;
+extern unsigned char recipe1[];
+extern unsigned char recipe2[];
+extern unsigned char *recipes[];
 
 void run_recipe(void);
-void end_recipe(int);
-void end_loop(int);
-void loop(int,int);
+void end_recipe(int,int);
+int end_loop(int,int);
+void loop(int,int,int);
 void wait(int,int);
 void move(int,int);
-void operate(int, int);
+void operate(int, int, int);
 void process_event(enum events);
