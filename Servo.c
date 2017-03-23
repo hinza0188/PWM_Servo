@@ -30,10 +30,7 @@ unsigned char *recipes[] = { recipe1, recipe2, 0 };
 * int servo = (0 -> PA0, 1 -> PA1)
 * returns None
 */
-void operate( int dude, int servo, int line ) {
-	int opcode = (dude & 224);
-	int param = (dude & 31);
-	
+void operate( int opcode, int param, int servo, int line ) {
 	switch (opcode) {
 		case MOV: 					// opcode is 001
 			move(param, servo);
@@ -45,10 +42,10 @@ void operate( int dude, int servo, int line ) {
 			loop(param, servo, line);
 			break;
 		case END_LOOP: 			// opcode is 101
-			end_loop(servo, line);
+			end_loop(line);
 			break;
 		case RECIPE_END: 		// opcode is 000
-			end_recipe(servo, line);
+			end_recipe(line);
 			break;
 	}
 }
@@ -113,29 +110,39 @@ void wait(int param, int servo) {
 }
 
 void loop(int param, int servo, int line) {
+	int start, i, code;
 	if (!servo) { // represents servo connected to PA0
+		for (i=0; i < param; i++) {	// repeat this loop upon param multiplier
+			start = 1;
+			while(recipe1[line+start]==END_LOOP) {
+				code = recipe1[line+start];
+				operate(code&224, code&31, servo, line);
+				start++;
+			}
+		}
+		
+		
+		
 		
 	} else { // represents servo connected to PA1
 		// do functionality here
 	}
+
 }
 
-int end_loop(int servo, int line) {
-	if (!servo) { // represents servo connected to PA0
-		// do functionality here
-	} else { // represents servo connected to PA1
-		// do functionality here
+int end_loop(int line) {
+	int start, end;
+	start = 1;
+	while(recipe1[line+start]==END_LOOP) {
+		start++;
 	}
-	return 0;
+	end = line+start;
+
+	return end;	// gives the line recipe index number of the end_loop
 }
 
-void end_recipe(int servo, int line) {
+void end_recipe(int line) {
 	// Blink the LED
-	if (!servo) { // represents servo connected to PA0
-		// do functionality here
-	} else { // represents servo connected to PA1
-		// do functionality here
-	}
 }
 
 void run_recipe(void) {

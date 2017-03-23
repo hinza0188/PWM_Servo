@@ -21,7 +21,7 @@ enum events servo0L_event, servo1R_event;
 enum servo_states servo0L_state, servo1R_state;
 
 int main(void){
-	int i,j;
+	int i,idx0, idx1, opcode0, param0, opcode1, param1;
 	int counter;
 //	char rxbyte[2];
 //  char end_prompt[] = "function has been executed!\r\n";
@@ -52,7 +52,7 @@ int main(void){
 	}
 	USART_Write( USART2, (uint8_t *)input_prompt, sizeof(input_prompt));
 	////////////////////////////////////////////////////////////////////////////////
-	while (1) { // run forever			
+	for(;;) { // run forever			
 		// check servo 0 is free
 		
 		// check servo 1 is free
@@ -65,10 +65,25 @@ int main(void){
 		                                          
 		////////////////////////////////////////////////////////////////////////////////
 		// call recipe
-		j = 0; 	// the index number of the recipe
-		while (recipe1[j] != RECIPE_END || recipe2[j] != RECIPE_END) {
-			operate((int)recipe1[j], 0, j);
-			operate((int)recipe2[j], 1, j);
+		idx0 = 0; 	// the index number of the recipe 1
+		idx1 = 0;		// the index number of the recipe 2
+		while (recipe1[idx0] != RECIPE_END || recipe2[idx1] != RECIPE_END) { //run until recipe_end found
+			opcode0 = ((int)recipe1[idx0] & 224);
+			param0 = ((int)recipe1[idx0] & 31);
+			opcode1 = ((int)recipe2[idx1] & 224);
+			param1 = ((int)recipe2[idx1] & 31);
+			
+			if (!(opcode0==LOOP && param0 ==0)) {
+				operate(opcode0, param0, 0, idx0);
+			} else {
+				idx0 = end_loop(idx0); 
+			}
+			
+			if (!(opcode1==LOOP && param1==0)) {
+				operate(opcode1, param1, 1, idx1);
+			} else {
+				idx1 = end_loop(idx1);
+			}
 			
 			// write general wait for 100 ms using timer 5
 			Counter_Init();					// Initialize TIM5 Counter Mode
@@ -79,10 +94,11 @@ int main(void){
 					break;
 				}
 			}
-			j++;
-		}	// recipe calling ends here ///////////////////////////////////////////////////
+			idx0++;
+			idx1++;
+		}
+		operate(RECIPE_END, 0, 0, 0);
+		// recipe calling ends here ///////////////////////////////////////////////////////
 		///////////////////////////////////////////////////////////////////////////////////
-	}
-	
-	
+	}	
 }
