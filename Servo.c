@@ -3,6 +3,9 @@
 */
 
 // Include all required headers
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "stm32l476xx.h"
 #include "Servo.h"
 #include "Init.h"
@@ -17,10 +20,10 @@ unsigned char recipe1[] = {
 };
 */
 unsigned char recipe1[] = { 
-	MOV + 1, MOV + 2, MOV + 3, END_LOOP, RECIPE_END 
+	MOV, MOV + 1, LOOP + 0, MOV + 5, MOV + 4, END_LOOP, MOV + 2, MOV + 3, MOV + 4, MOV + 5, RECIPE_END 
 };
 unsigned char recipe2[] = { 
-	MOV + 5, MOV + 4, MOV + 3, MOV + 2,  MOV + 1, MOV + 0, LOOP +3,  RECIPE_END 
+	MOV + 5, MOV + 4, MOV + 3, MOV + 2,  MOV + 1, MOV + 0, RECIPE_END 
 };
 unsigned char *recipes[] = { recipe1, recipe2, 0 };
 
@@ -35,22 +38,25 @@ unsigned char *recipes[] = { recipe1, recipe2, 0 };
 * int servo = (0 -> PA0, 1 -> PA1)
 * returns None
 */
-void operate( int opcode, int param, int servo, int line ) {
-	switch (opcode) {
-		case MOV: 					// opcode is 001
+void operate( unsigned char recipe[], int servo, int recipe_idx ) {
+    int opcode = recipe[recipe_idx]&224;
+    int param = recipe[recipe_idx]&31;
+    
+    switch (opcode) {
+		case MOV: 					// opcode 001
 			move(param, servo);
 			break;
-		case WAIT: 					// opcode is 010
+		case WAIT: 					// opcode 010
 			wait(param, servo);
 			break;
-		case LOOP: 					// opcode is 100
-			loop(param, servo, line);
+		case LOOP: 					// opcode 100
+			loop(param, recipe_idx, recipe);
 			break;
-		case END_LOOP: 			// opcode is 101
-			end_loop(line);
+		case END_LOOP: 			    // opcode 101
+			end_loop(recipe_idx);
 			break;
-		case RECIPE_END: 		// opcode is 000
-			end_recipe(line);
+		case RECIPE_END: 		    // opcode 000
+			end_recipe(recipe_idx);
 			break;
 	}
 }
@@ -114,44 +120,63 @@ void wait(int param, int servo) {
 	}
 }
 
-void loop(int param, int servo, int line) {
-	int start, i, code;
-	if (!servo) { // represents servo connected to PA0
-		for (i=0; i < param-1; i++) {	// repeat this loop upon param multiplier
-			start = 1;
-			while(recipe1[line+start]==END_LOOP) {
-				code = recipe1[line+start];
-				operate(code&224, code&31, servo, line);
-				start++;
-			}
-		}
-	} else {/////this loop is used to represent to PA1
-		for (i=0; i < param-1; i++) {	// repeat this loop upon param multiplier
-			start = 1;
-			while(recipe2[line+start]==END_LOOP) {
-				code = recipe2[line+start];
-				operate(code&224, code&31, servo, line);
-				start++;
-			}
-		}
-	}
-
+// inserts into subject[] at position pos
+void append(unsigned char subject[], const char insert[], int pos) {
+    //unsigned char temp[10] = {};
+        
+        
 }
 
-int end_loop(int line) {
+void remove_command(unsigned char recipe[], int i) {
+    for (; recipe[i]; i++) {
+        recipe[i] = recipe[i+1];
+    }
+}
+
+// grab the recipe and modify the operate order
+void loop(int param, int recipe_idx, unsigned char recipe[]) {
+    int i=0;
+    //int recipe_len = sizeof(recipe);
+    if (param == 0) {
+        // kill the looping command in the recipe
+        while (recipe[recipe_idx] != (unsigned char)END_LOOP) {
+            remove_command(recipe,recipe_idx);
+            i++;
+        }
+        remove_command(recipe,recipe_idx);
+        // delete loop and end_loop command and finish the process
+        return;
+    }
+    
+    /*
+    while(recipe[recipe_idx+i]!=END_LOOP) {
+        // create temporary list of commands that are between loop and end_loop
+        //const char new_command = recipe1[recipe_idx+i];
+        i++;
+    }
+    */
+    
+    
+    
+}
+
+// gives the line recipe index number of the end_loop
+int end_loop(int recipe_idx) {
 	int start, end;
 	start = 1;
-	while(recipe1[line+start]==END_LOOP) {
+	while(recipe1[recipe_idx+start]==END_LOOP) {
 		start++;
 	}
-	end = line+start;
+	end = recipe_idx + start;
 
-	return end;	// gives the line recipe index number of the end_loop
+	return end;	
 }
 
+// Blink the LED here
 void end_recipe(int line) {
 	
-	// Blink the LED
+	// functionality coming soon
+    
 }
 
 void run_recipe(void) {

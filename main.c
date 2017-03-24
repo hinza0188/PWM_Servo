@@ -21,7 +21,7 @@ enum events servo0L_event, servo1R_event;
 enum servo_states servo0L_state, servo1R_state;
 
 int main(void){
-	int i,idx0, idx1, opcode0, param0, opcode1, param1;
+	int i,idx0, idx1;
 	int counter;
 //	char rxbyte[2];
 //  char end_prompt[] = "function has been executed!\r\n";
@@ -35,12 +35,12 @@ int main(void){
 	prompts[5] = "5.Press N or n for No-operation\r\n";
 	prompts[6] = "6.press B or b to restart the reciepe\r\n";
 
-	System_Clock_Init();		// Switch System Clock = 80 MHz
+	System_Clock_Init();		        // Switch System Clock = 80 MHz
 	UART2_Init();						// Initialize uart interaction
 	GPIO_Init();						// Initialize GPIO pin settings
 	PWM_Init();							// Initialize TIM2 PWM Mode
 	
-  servo0L_status = status_paused;	
+    servo0L_status = status_paused;	
 	servo0L_state = state_unknown;
 	servo1R_status = status_paused;
 	servo1R_state = state_unknown;	
@@ -65,25 +65,11 @@ int main(void){
 		                                          
 		////////////////////////////////////////////////////////////////////////////////
 		// call recipe
-		idx0 = 0; 	// the index number of the recipe 1
+		idx0 = 0; 	    // the index number of the recipe 1
 		idx1 = 0;		// the index number of the recipe 2
 		while (recipe1[idx0] != RECIPE_END || recipe2[idx1] != RECIPE_END) { //run until recipe_end found
-			opcode0 = ((int)recipe1[idx0] & 224);
-			param0 = ((int)recipe1[idx0] & 31);
-			opcode1 = ((int)recipe2[idx1] & 224);
-			param1 = ((int)recipe2[idx1] & 31);
-			
-			if (!(opcode0==LOOP && param0 ==0)) {
-				operate(opcode0, param0, 0, idx0);
-			} else {
-				idx0 = end_loop(idx0); 
-			}
-			
-			if (!(opcode1==LOOP && param1==0)) {
-				operate(opcode1, param1, 1, idx1);
-			} else {
-				idx1 = end_loop(idx1);
-			}
+            operate(recipe1, 0, idx0);       //param: the recipe, servo number, and recipe index
+            operate(recipe2, 1, idx1);       //param: the recipe, servo number, and recipe index
 			
 			// write general wait for 100 ms using timer 5
 			Counter_Init();					// Initialize TIM5 Counter Mode
@@ -97,7 +83,6 @@ int main(void){
 			idx0++;
 			idx1++;
 		}
-		operate(RECIPE_END, 0, 0, 0);
 		// recipe calling ends here ///////////////////////////////////////////////////////
 		///////////////////////////////////////////////////////////////////////////////////
 	}	
