@@ -12,10 +12,10 @@
 static enum servo_states current_servo_state = state_unknown ;
 
 unsigned char recipe1[] = { 
-	MOV + 5, MOV + 0, MOV + 5, MOV + 0,  MOV + 5, MOV + 3, RECIPE_END 
+	MOV + 5, MOV + 0, MOV + 5, MOV + 0,  MOV + 5, MOV + 3, LOOP + 2 , RECIPE_END 
 };
 unsigned char recipe2[] = { 
-	MOV + 5, MOV + 4, MOV + 3, MOV + 2,  MOV + 1, MOV + 0, RECIPE_END 
+	MOV + 5, MOV + 4, MOV + 3, MOV + 2,  MOV + 1, MOV + 0, LOOP +3,  RECIPE_END 
 };
 unsigned char *recipes[] = { recipe1, recipe2, 0 };
 
@@ -114,18 +114,21 @@ void loop(int param, int servo, int line) {
 	if (!servo) { // represents servo connected to PA0
 		for (i=0; i < param; i++) {	// repeat this loop upon param multiplier
 			start = 1;
-			while(recipe1[line+start]==END_LOOP) {
+			while(recipe1[line+start]!=END_LOOP) {
 				code = recipe1[line+start];
 				operate(code&224, code&31, servo, line);
 				start++;
 			}
 		}
-		
-		
-		
-		
-	} else { // represents servo connected to PA1
-		// do functionality here
+	} else {/////this loop is used to represent to PA1
+		for (i=0; i < param; i++) {	// repeat this loop upon param multiplier
+			start = 1;
+			while(recipe2[line+start]!=END_LOOP) {
+				code = recipe2[line+start];
+				operate(code&224, code&31, servo, line);
+				start++;
+			}
+		}
 	}
 
 }
@@ -142,6 +145,7 @@ int end_loop(int line) {
 }
 
 void end_recipe(int line) {
+	
 	// Blink the LED
 }
 
