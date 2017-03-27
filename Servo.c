@@ -123,8 +123,7 @@ void wait(int param, int servo) {
 // inserts into subject[] at position pos
 void append(unsigned char subject[], const char insert[], int pos) {
     //unsigned char temp[10] = {};
-        
-        
+
 }
 
 void remove_command(unsigned char recipe[], int i) {
@@ -145,6 +144,7 @@ void loop(int param, int recipe_idx, int servo, unsigned char recipe[]) {
         }
         remove_command(recipe,recipe_idx);
         // delete loop and end_loop command and finish the process
+				operate(recipe, servo, recipe_idx);
         return;
     }
     

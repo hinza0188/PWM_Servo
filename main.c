@@ -19,6 +19,8 @@ uint8_t mainBuffer[BufferSize];
 enum status servo0L_status, servo1R_status;
 enum events servo0L_event, servo1R_event;
 enum servo_states servo0L_state, servo1R_state;
+int wait_count_0 = 0;
+int wait_count_1 = 0;
 int global_pause_0 = 0;
 int global_pause_1 = 0;
 
