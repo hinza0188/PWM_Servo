@@ -16,9 +16,6 @@
 
 /* declare variables here */
 uint8_t mainBuffer[BufferSize];
-enum status servo0L_status, servo1R_status;
-enum events servo0L_event, servo1R_event;
-enum servo_states servo0L_state, servo1R_state;
 int wait_count_0 = 0;
 int wait_count_1 = 0;
 int global_pause_0 = 0;
@@ -55,11 +52,6 @@ int main(void){
 	UART2_Init();						// Initialize uart interaction
 	GPIO_Init();						// Initialize GPIO pin settings
 	PWM_Init();							// Initialize TIM2 PWM Mode
-	
-  servo0L_status = status_paused;	
-	servo0L_state = state_unknown;
-	servo1R_status = status_paused;
-	servo1R_state = state_unknown;	
 	
 	//////////////////////////////PRINT TUTORIAL////////////////////////////////////
 	for (i=0; i<PROMPT_SIZE; i++) {

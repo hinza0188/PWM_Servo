@@ -11,9 +11,6 @@
 #include "Init.h"
 #include "LED.h"
 
-/* define status of the servo in private variable */
-static enum servo_states current_servo_state = state_unknown ;
-
 /*
 unsigned char recipe1[] = { 
 	MOV + 5, MOV + 0, MOV + 5, MOV + 0,  MOV + 5, MOV + 3, LOOP + 2 , RECIPE_END 
@@ -22,6 +19,7 @@ unsigned char recipe1[] = {
 unsigned char recipe1[] = { 
 	MOV, MOV + 1, LOOP + 0, MOV + 5, MOV + 4, END_LOOP, MOV + 2, MOV + 3, MOV + 4, MOV + 5, RECIPE_END 
 };
+unsigned char recipe_space[50] = {0}; // give extra space in between two recipes for looping room
 unsigned char recipe2[] = { 
 	MOV + 5, MOV + 4, MOV + 3, MOV + 2,  MOV + 1, MOV + 0, RECIPE_END 
 };
@@ -51,9 +49,6 @@ void operate( unsigned char recipe[], int servo, int recipe_idx ) {
 			break;
 		case LOOP: 					// opcode 100
 			loop(param, recipe_idx, servo, recipe);
-			break;
-		case END_LOOP: 			    // opcode 101
-			end_loop(recipe_idx);
 			break;
 		case RECIPE_END: 		    // opcode 000
 			end_recipe(recipe_idx);
@@ -120,23 +115,25 @@ void wait(int param, int servo) {
 	}
 }
 
-// inserts into subject[] at position pos
-void append(unsigned char subject[], const char insert[], int pos) {
-    //unsigned char temp[10] = {};
-
-}
-
+// remove recipe command by continuously overriding with next value 
 void remove_command(unsigned char recipe[], int i) {
     for (; recipe[i]; i++) {
         recipe[i] = recipe[i+1];
     }
 }
 
+// inserts one recipe command into subject[] at position pos
+void append(unsigned char subject[], unsigned char insert[], int pos) {
+    //unsigned char temp[10] = {};
+
+}
+
 // grab the recipe and modify the operate order
 void loop(int param, int recipe_idx, int servo, unsigned char recipe[]) {
     int i=0;
+		unsigned char temp[10]; 	// reserve 10 space for original looping commands if applicable
     //int recipe_len = sizeof(recipe);
-    if (param == 0) {
+    if (param == 0) { // case 1: remove all recipe command within the loop
         // kill the looping command in the recipe
         while (recipe[recipe_idx] != (unsigned char)END_LOOP) {
             remove_command(recipe,recipe_idx);
@@ -146,36 +143,32 @@ void loop(int param, int recipe_idx, int servo, unsigned char recipe[]) {
         // delete loop and end_loop command and finish the process
 				operate(recipe, servo, recipe_idx);
         return;
-    }
-    
-    /*
-    while(recipe[recipe_idx+i]!=END_LOOP) {
-        // create temporary list of commands that are between loop and end_loop
-        //const char new_command = recipe1[recipe_idx+i];
-        i++;
-    }
-    */
-    
-    
-    
-}
-
-// gives the line recipe index number of the end_loop
-int end_loop(int recipe_idx) {
-	int start, end;
-	start = 1;
-	while(recipe1[recipe_idx+start]==END_LOOP) {
-		start++;
+    } else {	// case 2: param is greater than 1, remove loop and end_loop only and move on
+			// copy the repeated part here
+			remove_command(recipe,recipe_idx);		// remove loop command
+			while(recipe[recipe_idx+i]!=END_LOOP) {
+				// create temporary list of commands that are between loop and end_loop
+				temp[i] = recipe[recipe_idx+i];
+				// const char new_command = recipe1[recipe_idx+i];
+				i++;
+			}
+			remove_command(recipe,recipe_idx+i);	// remove end_loop command
+			if (param == 1) { // case 3: param is 1, let modified recipe just run
+				operate(recipe, servo, recipe_idx);
+				return;
+			}
+			// case 4: param is more than 2, paste the temp commands
+			for (i=0; i < param; i++) { 
+				// append the looping commands here
+				append(recipe,temp,recipe_idx);
+			}
 	}
-	end = recipe_idx + start;
-
-	return end;	
 }
 
 // Blink the LED here
 void end_recipe(int line) {
 	
-	// functionality coming soon
+	// functionality coming soon, flip the LED off
     
 }
 
@@ -183,43 +176,3 @@ void run_recipe(void) {
 	return;
 }
 
-
-static void start_move( enum servo_states my_state ) {
-	return;
-}
-
-
-
-
-// This section should be in a separate .c file such as state_machine.c.
-// In this code you add code to each case to process the 
-void process_event(enum events event) {
-	switch ( current_servo_state ){
-		case state_position_0 :		// left-most position
-			if ( event == user_entered_left ) {
-				current_servo_state = state_position_0;		// when the move ends (enough time has elapsed) new state will be state_position_1
-			} else if (event == user_entered_right) {
-				start_move(state_position_1);
-				current_servo_state = state_moving;
-				// wait for one duty cycle
-				current_servo_state = state_position_1;
-			}
-      break ;
-		case state_position_1:
-      break;
-		case state_position_2:
-      break;
-		case state_position_3:
-      break;
-		case state_position_4:
-      break;
-		case state_position_5:		// right-most position
-      break;
-		case state_unknown :
-			break;
-		case state_recipe_ended :
-			break;
-    case state_moving:
-      break;
-	}
-}
