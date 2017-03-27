@@ -19,10 +19,24 @@ uint8_t mainBuffer[BufferSize];
 enum status servo0L_status, servo1R_status;
 enum events servo0L_event, servo1R_event;
 enum servo_states servo0L_state, servo1R_state;
+int global_pause_0 = 0;
+int global_pause_1 = 0;
+
+
+void global_wait() {
+	int counter;
+	Counter_Init();					// Initialize TIM5 Counter Mode
+	while(1){
+		counter = TIM5->CNT;
+		if ( counter > 0x1800 ) {			// WAIT 100 ms
+			TIM5->CR1 &= 0;							// Stop the timer for reseting the counter value
+			break;
+		}
+	}
+}
 
 int main(void){
 	int i,idx0, idx1;
-	int counter;
 //	char rxbyte[2];
 //  char end_prompt[] = "function has been executed!\r\n";
 	char input_prompt[] = "Type two commands for asynchronous Servo running\r\n";
@@ -40,7 +54,7 @@ int main(void){
 	GPIO_Init();						// Initialize GPIO pin settings
 	PWM_Init();							// Initialize TIM2 PWM Mode
 	
-    servo0L_status = status_paused;	
+  servo0L_status = status_paused;	
 	servo0L_state = state_unknown;
 	servo1R_status = status_paused;
 	servo1R_state = state_unknown;	
@@ -52,36 +66,42 @@ int main(void){
 	}
 	USART_Write( USART2, (uint8_t *)input_prompt, sizeof(input_prompt));
 	////////////////////////////////////////////////////////////////////////////////
-	for(;;) { // run forever			
-		// check servo 0 is free
-		
-		// check servo 1 is free
-		
-		
-		
+	for(;;) { // run forever
 		///////////////////////////////////////////////////////////////////////////////
 		// check if user input
 		// parse it here?
 		                                          
 		////////////////////////////////////////////////////////////////////////////////
 		// call recipe
-		idx0 = 0; 	    // the index number of the recipe 1
+		idx0 = 0; 	// the index number of the recipe 1
 		idx1 = 0;		// the index number of the recipe 2
 		while (recipe1[idx0] != RECIPE_END || recipe2[idx1] != RECIPE_END) { //run until recipe_end found
-            operate(recipe1, 0, idx0);       //param: the recipe, servo number, and recipe index
-            operate(recipe2, 1, idx1);       //param: the recipe, servo number, and recipe index
-			
-			// write general wait for 100 ms using timer 5
-			Counter_Init();					// Initialize TIM5 Counter Mode
-			while(1){
-				counter = TIM5->CNT;
-				if ( counter > 0x2000 ) {			// WAIT 100 ms
-					TIM5->CR1 &= 0;							// Stop the timer for reseting the counter value
-					break;
+			//////////////////////////////////// SERVO 0 ///////////////////////////////////////////////////
+			if (!(global_pause_0)) {
+				if (wait_count_0 < 1) {
+					operate(recipe1, 0, idx0);       //param: the recipe, servo number, and recipe index
+				} else {
+					wait_count_0--;
+				}
+				if (wait_count_0 == 0) {
+					idx0++;
 				}
 			}
-			idx0++;
-			idx1++;
+			////////////////////////////////////////////////////////////////////////////////////////////////
+			///////////////////////////////////// SERVO 1 //////////////////////////////////////////////////
+			if (!(global_pause_1)) {
+				if (wait_count_1 < 1) {
+					operate(recipe2, 1, idx1);       //param: the recipe, servo number, and recipe index
+				} else {
+					wait_count_1--;
+				}
+				if (wait_count_1 == 0) {
+					idx1++;
+				}
+			}
+			/////////////////////////////////////////////////////////////////////////////////////////////////
+			// write general wait for 100 ms using timer 5
+			global_wait();
 		}
 		// recipe calling ends here ///////////////////////////////////////////////////////
 		///////////////////////////////////////////////////////////////////////////////////

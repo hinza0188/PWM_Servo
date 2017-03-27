@@ -43,13 +43,17 @@ enum events {
 extern unsigned char recipe1[];
 extern unsigned char recipe2[];
 extern unsigned char *recipes[];
+extern int wait_count_0;
+extern int wait_count_1;
+extern int global_puase_0;
+extern int global_pause_1;
 
 void run_recipe(void);
 void end_recipe(int);
 int end_loop(int);
 void remove_command(unsigned char[], int);
 void append(unsigned char[], const char[], int);
-void loop(int,int,unsigned char[]);
+void loop(int,int,int,unsigned char[]);
 void wait(int,int);
 void move(int,int);
 void operate(unsigned char[],int,int);

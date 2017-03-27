@@ -50,7 +50,7 @@ void operate( unsigned char recipe[], int servo, int recipe_idx ) {
 			wait(param, servo);
 			break;
 		case LOOP: 					// opcode 100
-			loop(param, recipe_idx, recipe);
+			loop(param, recipe_idx, servo, recipe);
 			break;
 		case END_LOOP: 			    // opcode 101
 			end_loop(recipe_idx);
@@ -114,9 +114,9 @@ void move(int param, int servo) {
 */
 void wait(int param, int servo) {
 	if (!servo) { // represents servo connected to PA0
-		
+		wait_count_0 += param;
 	} else { // represents servo connected to PA1
-
+		wait_count_1 += param;
 	}
 }
 
@@ -134,7 +134,7 @@ void remove_command(unsigned char recipe[], int i) {
 }
 
 // grab the recipe and modify the operate order
-void loop(int param, int recipe_idx, unsigned char recipe[]) {
+void loop(int param, int recipe_idx, int servo, unsigned char recipe[]) {
     int i=0;
     //int recipe_len = sizeof(recipe);
     if (param == 0) {

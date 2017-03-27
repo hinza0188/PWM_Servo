@@ -49,7 +49,7 @@ void user_prompt() {
 		for(i=0;i<2;i++) {
 			if (i==0) {
 				if(rxbyte[i]== 'P' || rxbyte[i] == 'p') {
-					servo0L_event = user_entered_pause;
+					global_pause_0 = 1;
 				}
 				else if(rxbyte[i] == 'C' || rxbyte[i] == 'c') {
 					servo0L_event = user_entered_continue;
@@ -68,7 +68,7 @@ void user_prompt() {
 				}
 			} else {
 				if(rxbyte[i]== 'P' || rxbyte[i] == 'p') {
-					servo1R_event = user_entered_pause;
+					global_pause_1 = 1;
 				}
 				else if(rxbyte[i] == 'C' || rxbyte[i] == 'c') {
 					servo1R_event = user_entered_continue;
