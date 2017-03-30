@@ -17,13 +17,16 @@ unsigned char recipe1[] = {
 };
 */
 unsigned char recipe1[] = { 
-	MOV, MOV + 1, LOOP + 0, MOV + 5, MOV + 4, END_LOOP, MOV + 2, MOV + 3, MOV + 4, MOV + 5, RECIPE_END 
+	LOOP + 3, MOV + 2, MOV + 3, END_LOOP, WAIT + 31, RECIPE_END 
 };
-unsigned char recipe_space[50] = {0}; // give extra space in between two recipes for looping room
+unsigned char space_holder[] = { 
+	RECIPE_END, RECIPE_END, RECIPE_END, RECIPE_END, RECIPE_END, RECIPE_END, RECIPE_END,
+	RECIPE_END, RECIPE_END, RECIPE_END, RECIPE_END, RECIPE_END, RECIPE_END, RECIPE_END
+};
 unsigned char recipe2[] = { 
-	MOV + 5, MOV + 4, MOV + 3, MOV + 2,  MOV + 1, MOV + 0, RECIPE_END 
+	MOV + 5, MOV + 4, MOV + 3, MOV + 2,  MOV + 1, MOV + 0, WAIT + 31, RECIPE_END 
 };
-unsigned char *recipes[] = { recipe1, recipe2, 0 };
+unsigned char *recipes[] = { recipe1, space_holder, recipe2, RECIPE_END };
 
 // Examples of simple recipes
 // Note that, because the bottom 5 bits are zeros adding or bitwise or'ing
@@ -123,15 +126,29 @@ void remove_command(unsigned char recipe[], int i) {
 }
 
 // inserts one recipe command into subject[] at position pos
-void append(unsigned char subject[], unsigned char insert[], int pos) {
-    //unsigned char temp[10] = {};
-
+void append(unsigned char recipe[], unsigned char insert[], int pos) {
+		int i;
+		char *precipe, *pinsert;
+		unsigned char temp[100] = {0};		// takes original subject array into temp variable
+		precipe = recipe;
+		pinsert = insert;
+		
+		strncpy(temp, precipe, pos);			// copy the first part of the subject into the temp variable
+		temp[pos] = '\0';									// terminate the string
+		strcat(temp,pinsert);							// concatenate the rest of the insert
+		strcat(temp,precipe+pos);				// concatenate the left over subject
+		
+		// synchronize recipe before temp gets dumped
+		for (i=0; temp[i] != '\0'; i++ ) {
+			recipe[i] = temp[i];
+		}
+		
 }
 
 // grab the recipe and modify the operate order
 void loop(int param, int recipe_idx, int servo, unsigned char recipe[]) {
     int i=0;
-		unsigned char temp[10]; 	// reserve 10 space for original looping commands if applicable
+		unsigned char temp[20]; 	// reserve 10 space for original looping commands if applicable
     //int recipe_len = sizeof(recipe);
     if (param == 0) { // case 1: remove all recipe command within the loop
         // kill the looping command in the recipe
@@ -141,8 +158,6 @@ void loop(int param, int recipe_idx, int servo, unsigned char recipe[]) {
         }
         remove_command(recipe,recipe_idx);
         // delete loop and end_loop command and finish the process
-				operate(recipe, servo, recipe_idx);
-        return;
     } else {	// case 2: param is greater than 1, remove loop and end_loop only and move on
 			// copy the repeated part here
 			remove_command(recipe,recipe_idx);		// remove loop command
@@ -162,14 +177,16 @@ void loop(int param, int recipe_idx, int servo, unsigned char recipe[]) {
 				// append the looping commands here
 				append(recipe,temp,recipe_idx);
 			}
-	}
+    }
+		operate(recipe, servo, recipe_idx);
+		return;
 }
 
 // Blink the LED here
 void end_recipe(int line) {
 	
 	// functionality coming soon, flip the LED off
-    
+  return;
 }
 
 void run_recipe(void) {

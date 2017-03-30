@@ -70,6 +70,8 @@ int main(void){
 		idx0 = 0; 	// the index number of the recipe 1
 		idx1 = 0;		// the index number of the recipe 2
 		while (recipe1[idx0] != RECIPE_END || recipe2[idx1] != RECIPE_END) { //run until recipe_end found
+			//UI goes here?//
+			
 			//////////////////////////////////// SERVO 0 ///////////////////////////////////////////////////
 			if (!(global_pause_0)) {
 				if (wait_count_0 < 1) {
