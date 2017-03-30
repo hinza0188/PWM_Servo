@@ -128,15 +128,15 @@ void remove_command(unsigned char recipe[], int i) {
 // inserts one recipe command into subject[] at position pos
 void append(unsigned char recipe[], unsigned char insert[], int pos) {
 		int i;
-		char *precipe, *pinsert;
+		unsigned char *precipe, *pinsert;
 		unsigned char temp[100] = {0};		// takes original subject array into temp variable
 		precipe = recipe;
 		pinsert = insert;
 		
-		strncpy(temp, precipe, pos);			// copy the first part of the subject into the temp variable
+		strncpy((char*)temp, (const char*)precipe, pos);			// copy the first part of the subject into the temp variable
 		temp[pos] = '\0';									// terminate the string
-		strcat(temp,pinsert);							// concatenate the rest of the insert
-		strcat(temp,precipe+pos);				// concatenate the left over subject
+		strcat((char*)temp,(const char*)pinsert);							// concatenate the rest of the insert
+		strcat((char*)temp,(const char*)precipe+pos);				// concatenate the left over subject
 		
 		// synchronize recipe before temp gets dumped
 		for (i=0; temp[i] != '\0'; i++ ) {

@@ -15,11 +15,12 @@
 #define PROMPT_SIZE 7
 
 /* declare variables here */
-uint8_t mainBuffer[BufferSize];
+uint8_t Buffer[BufferSize];
+uint32_t* pRx_counter;
 int wait_count_0 = 0;
 int wait_count_1 = 0;
-int global_pause_0 = 0;
-int global_pause_1 = 0;
+int global_pause_0 = 1;			// puase all for testing purposes
+int global_pause_1 = 1;			// pause al lfor testing purposes
 
 
 void global_wait() {
@@ -35,9 +36,9 @@ void global_wait() {
 }
 
 int main(void){
+
 	int i,idx0, idx1;
-//	char rxbyte[2];
-//  char end_prompt[] = "function has been executed!\r\n";
+  //char end_prompt[] = "function has been executed!\r\n";
 	char input_prompt[] = "Type two commands for asynchronous Servo running\r\n";
 	const char *prompts[PROMPT_SIZE];
 	prompts[0] = "Welcome to the Project 2, and here are the instructions\r\n";
@@ -49,10 +50,13 @@ int main(void){
 	prompts[6] = "6.press B or b to restart the reciepe\r\n";
 
 	System_Clock_Init();		        // Switch System Clock = 80 MHz
-	UART2_Init();						// Initialize uart interaction
-	GPIO_Init();						// Initialize GPIO pin settings
-	PWM_Init();							// Initialize TIM2 PWM Mode
+	UART2_Init();										// Initialize uart interaction
+	NVIC_SetPriority(USART2_IRQn, 0);			// Set Priority to 1
+	NVIC_EnableIRQ(USART2_IRQn);					// Enable interrupt of USART2 peripheral
+	GPIO_Init();										// Initialize GPIO pin settings
+	PWM_Init();											// Initialize TIM2 PWM Mode
 	
+	USART_IRQHandler(USART2, Buffer, pRx_counter);
 	//////////////////////////////PRINT TUTORIAL////////////////////////////////////
 	for (i=0; i<PROMPT_SIZE; i++) {
 		// print all 6 prompt lines for user tutorial
@@ -64,13 +68,64 @@ int main(void){
 		///////////////////////////////////////////////////////////////////////////////
 		// check if user input
 		// parse it here?
-		                                          
+		                   
 		////////////////////////////////////////////////////////////////////////////////
 		// call recipe
 		idx0 = 0; 	// the index number of the recipe 1
 		idx1 = 0;		// the index number of the recipe 2
 		while (recipe1[idx0] != RECIPE_END || recipe2[idx1] != RECIPE_END) { //run until recipe_end found
 			//UI goes here?//
+			
+			/*
+			
+			USART_Write(USART2, (uint8_t *)newline, sizeof(newline));
+			
+			for(i=0;i<2;i++) {
+				if (i==0) {
+					if(rxbyte[i]== 'P' || rxbyte[i] == 'p') {
+						global_pause_0 = 1;
+					}
+					else if(rxbyte[i] == 'C' || rxbyte[i] == 'c') {
+						
+					}
+					else if(rxbyte[i]== 'R' || rxbyte[i] == 'r') {
+						
+					}
+					else if (rxbyte[i]== 'L' || rxbyte[i] == 'l') {
+						
+					}
+					else if (rxbyte[i] == 'N' || rxbyte[i] == 'n') {
+						
+					}
+					else if (rxbyte[i]== 'B' || rxbyte[i] == 'b') {
+					
+					}
+				} else {
+					if(rxbyte[i]== 'P' || rxbyte[i] == 'p') {
+						global_pause_1 = 1;
+					}
+					else if(rxbyte[i] == 'C' || rxbyte[i] == 'c') {
+						
+					}
+					else if(rxbyte[i]== 'R' || rxbyte[i] == 'r') {
+						
+					}
+					else if (rxbyte[i]== 'L' || rxbyte[i] == 'l') {
+						
+					}
+					else if (rxbyte[i] == 'N' || rxbyte[i] == 'n') {
+						
+					}
+					else if (rxbyte[i]== 'B' || rxbyte[i] == 'b') {
+						
+					}
+				}
+			}
+			*/
+			
+			
+			
+			
 			
 			//////////////////////////////////// SERVO 0 ///////////////////////////////////////////////////
 			if (!(global_pause_0)) {
